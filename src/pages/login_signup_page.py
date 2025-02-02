@@ -27,6 +27,8 @@ class LoginSignupPage(BasePage):
         self.__select_year_field =(By.ID,"years")
         self.__first_name_field =(By.ID,"first_name")
         self.__last_name_field =(By.ID,"last_name")
+        self.__address_field =(By.ID,"address1")
+
 
     def log_in(self, username, password):
         self.__web_element.send_key(self.__email_field, username)
