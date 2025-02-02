@@ -30,4 +30,4 @@ build/
 htmlcov/
 .coverage
 .tox/
-hhh.py
+.hhh.py
