@@ -12,6 +12,7 @@ pipeline {
             steps {
                 echo 'Checking out the code...'
                 git 'https://github.com/VardanKhublaryan/AutomationExersice'  // Replace with your repo URL
+                sh 'ls -la'
             }
         }
 
