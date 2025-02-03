@@ -1,28 +1,27 @@
 pipeline {
-    agent any  // Run on any available agent
+    agent any
 
     environment {
-        // Define environment variables
-        VENV_DIR = "${WORKSPACE}/venv"
-        PYTHON = "C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python312"  // Use python3 for Linux/macOS, or "python" for Windows
+        // Define the path to Python (update this to your Python installation path)
+        PYTHON = "C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python312\\python.exe"
+        VENV_DIR = "${WORKSPACE}\\venv"
     }
 
     stages {
         stage('Checkout') {
             steps {
                 echo 'Checking out the code...'
-                git 'https://github.com/VardanKhublaryan/AutomationExersice'  // Replace with your repo URL
+                git 'https://github.com/VardanKhublaryan/AutomationExersice/'
             }
         }
 
         stage('Set Up Virtual Environment') {
             steps {
                 echo 'Setting up a Python virtual environment...'
-                bat  """
-                    ${PYTHON} -m venv ${VENV_DIR}
-
-                    // call ${VENV_DIR}\\Scripts\\activate  // For Windows
-                    pip install --upgrade pip
+                bat """
+                    "${PYTHON}" -m venv "${VENV_DIR}"
+                    call "${VENV_DIR}\\Scripts\\activate"
+                    python -m pip install --upgrade pip
                 """
             }
         }
@@ -30,9 +29,8 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo 'Installing dependencies...'
-                bat  """
-
-                    // call ${VENV_DIR}\\Scripts\\activate  // For Windows
+                bat """
+                    call "${VENV_DIR}\\Scripts\\activate"
                     pip install -r requirements.txt
                 """
             }
@@ -41,9 +39,8 @@ pipeline {
         stage('Run Tests') {
             steps {
                 echo 'Running tests...'
-                bat  """
-
-                    // call ${VENV_DIR}\\Scripts\\activate  // For Windows
+                bat """
+                    call "${VENV_DIR}\\Scripts\\activate"
                     pytest --junitxml=test-results.xml --html=report.html
                 """
             }
@@ -52,7 +49,7 @@ pipeline {
         stage('Publish Test Results') {
             steps {
                 echo 'Publishing test results...'
-                junit 'test-results.xml'  // Publish JUnit test results
+                junit 'test-results.xml'
                 publishHTML(target: [
                     allowMissing: false,
                     alwaysLinkToLastBuild: true,
@@ -68,9 +65,7 @@ pipeline {
     post {
         always {
             echo 'Cleaning up...'
-            bat  """
-                rm -rf ${VENV_DIR}  // Clean up the virtual environment
-            """
+            bat "rmdir /s /q ${VENV_DIR}"  // Clean up the virtual environment
         }
         success {
             echo 'Pipeline succeeded!'
