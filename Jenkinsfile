@@ -12,14 +12,13 @@ pipeline {
             steps {
                 echo 'Checking out the code...'
                 git 'https://github.com/VardanKhublaryan/AutomationExersice'  // Replace with your repo URL
-                sh 'ls -la'
             }
         }
 
         stage('Set Up Virtual Environment') {
             steps {
                 echo 'Setting up a Python virtual environment...'
-                sh """
+                bat  """
                     ${PYTHON} -m venv ${VENV_DIR}
 
                     // call ${VENV_DIR}\\Scripts\\activate  // For Windows
@@ -31,7 +30,7 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo 'Installing dependencies...'
-                sh """
+                bat  """
 
                     // call ${VENV_DIR}\\Scripts\\activate  // For Windows
                     pip install -r requirements.txt
@@ -42,7 +41,7 @@ pipeline {
         stage('Run Tests') {
             steps {
                 echo 'Running tests...'
-                sh """
+                bat  """
 
                     // call ${VENV_DIR}\\Scripts\\activate  // For Windows
                     pytest --junitxml=test-results.xml --html=report.html
@@ -69,7 +68,7 @@ pipeline {
     post {
         always {
             echo 'Cleaning up...'
-            sh """
+            bat  """
                 rm -rf ${VENV_DIR}  // Clean up the virtual environment
             """
         }
