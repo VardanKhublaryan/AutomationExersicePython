@@ -6,7 +6,6 @@ class WebDriverSingleton:
 
     @staticmethod
     def get_driver():
-        """Static access method to get the WebDriver instance."""
         if WebDriverSingleton._instance is None:
             chrome_options = webdriver.ChromeOptions()
             chrome_options.add_argument("--start-maximized")
@@ -22,7 +21,6 @@ class WebDriverSingleton:
 
     @staticmethod
     def quit_driver():
-        """Quit the WebDriver instance and set it to None."""
         if WebDriverSingleton._instance:
             WebDriverSingleton._instance.quit()
-            WebDriverSingleton._instance = None  # Reset instance after quitting
+            WebDriverSingleton._instance = None
