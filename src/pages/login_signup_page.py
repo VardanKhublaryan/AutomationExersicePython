@@ -30,6 +30,7 @@ class LoginSignupPage(BasePage):
         self.__address_field =(By.ID,"address1")
 
 
+
     def log_in(self, username, password):
         self.__web_element.send_key(self.__email_field, username)
         self.__web_element.send_key(self.__password_field, password)

@@ -7,24 +7,24 @@ pipeline {
         VENV_DIR = "${WORKSPACE}\\venv"
     }
 
-    stages {
-        stage('Checkout') {
-            steps {
-                echo 'Checking out the code...'
-                git 'https://github.com/VardanKhublaryan/AutomationExersice/'
-            }
-        }
-
-        stage('Set Up Virtual Environment') {
-            steps {
-                echo 'Setting up a Python virtual environment...'
-                bat """
-                    "${PYTHON}" -m venv "${VENV_DIR}"
-                    call "${VENV_DIR}\\Scripts\\activate"
-                    python -m pip install --upgrade pip
-                """
-            }
-        }
+//     stages {
+//         stage('Checkout') {
+//             steps {
+//                 echo 'Checking out the code...'
+//                 git 'https://github.com/VardanKhublaryan/AutomationExersice/'
+//             }
+//         }
+//
+//         stage('Set Up Virtual Environment') {
+//             steps {
+//                 echo 'Setting up a Python virtual environment...'
+//                 bat """
+//                     "${PYTHON}" -m venv "${VENV_DIR}"
+//                     call "${VENV_DIR}\\Scripts\\activate"
+//                     python -m pip install --upgrade pip
+//                 """
+//             }
+//         }
 
         stage('Install Dependencies') {
             steps {
