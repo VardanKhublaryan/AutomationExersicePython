@@ -20,7 +20,7 @@ pipeline {
                 echo 'Setting up a Python virtual environment...'
                 bat """
                     "${PYTHON}" -m venv "${VENV_DIR}"
-//                     call "${VENV_DIR}\\Scripts\\activate"
+                    call "${VENV_DIR}\\Scripts\\activate"
 //                     python -m pip install --upgrade pip
                 """
             }
