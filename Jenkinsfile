@@ -4,7 +4,7 @@ pipeline {
     environment {
         // Define the path to Python (update this to your Python installation path)
         PYTHON = "C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python312\\python.exe"
-//         VENV_DIR = "${WORKSPACE}\\venv"
+        VENV_DIR = "${WORKSPACE}\\venv"
     }
 
     stages {
@@ -15,16 +15,16 @@ pipeline {
 //             }
 //         }
 //
-//         stage('Set Up Virtual Environment') {
-//             steps {
-//                 echo 'Setting up a Python virtual environment...'
-//                 bat """
-//                     "${PYTHON}" -m venv "${VENV_DIR}"
+        stage('Set Up Virtual Environment') {
+            steps {
+                echo 'Setting up a Python virtual environment...'
+                bat """
+                    "${PYTHON}" -m venv "${VENV_DIR}"
 //                     call "${VENV_DIR}\\Scripts\\activate"
 //                     python -m pip install --upgrade pip
-//                 """
-//             }
-//         }
+                """
+            }
+        }
 
         stage('Install Dependencies') {
             steps {
