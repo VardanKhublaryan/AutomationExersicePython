@@ -63,10 +63,10 @@ pipeline {
     }
 
     post {
-        always {
-            echo 'Cleaning up...'
-            bat "rmdir /s /q ${VENV_DIR}"  // Clean up the virtual environment
-        }
+//         always {
+//             echo 'Cleaning up...'
+//             bat "rmdir /s /q ${VENV_DIR}"  // Clean up the virtual environment
+//         }
         success {
             echo 'Pipeline succeeded!'
         }
