@@ -8,19 +8,20 @@ pipeline {
     }
 
     stages {
-//         stage('Checkout') {
-//             steps {
-//                 echo 'Checking out the code...'
-//                 git 'https://github.com/VardanKhublaryan/AutomationExersice/'
-//             }
-//         }
-//
+        stage('Checkout') {
+            steps {
+                echo 'Checking out the code...'
+                git 'https://github.com/VardanKhublaryan/AutomationExersice/'
+            }
+        }
+
         stage('Set Up Virtual Environment') {
             steps {
                 echo 'Setting up a Python virtual environment...'
                 bat """
                     "${PYTHON}" -m venv "${VENV_DIR}"
                     call "${VENV_DIR}\\Scripts\\activate"
+                    python -m pip install --upgrade pip
                 """
             }
         }
@@ -62,10 +63,10 @@ pipeline {
     }
 
     post {
-//         always {
-//             echo 'Cleaning up...'
-//             bat "rmdir /s /q ${VENV_DIR}"  // Clean up the virtual environment
-//         }
+        always {
+            echo 'Cleaning up...'
+            bat "rmdir /s /q ${VENV_DIR}"  // Clean up the virtual environment
+        }
         success {
             echo 'Pipeline succeeded!'
         }
