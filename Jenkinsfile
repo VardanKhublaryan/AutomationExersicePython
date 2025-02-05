@@ -21,7 +21,6 @@ pipeline {
                 bat """
                     "${PYTHON}" -m venv "${VENV_DIR}"
                     call "${VENV_DIR}\\Scripts\\activate"
-//                     python -m pip install --upgrade pip
                 """
             }
         }
