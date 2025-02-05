@@ -4,7 +4,7 @@ pipeline {
     environment {
         // Define the path to Python (update this to your Python installation path)
         PYTHON = "C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python312\\python.exe"
-        VENV_DIR = "${WORKSPACE}\\venv"
+//         VENV_DIR = "${WORKSPACE}\\venv"
     }
 
     stages {
