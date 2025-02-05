@@ -7,7 +7,7 @@ pipeline {
         VENV_DIR = "${WORKSPACE}\\venv"
     }
 
-//     stages {
+    stages {
 //         stage('Checkout') {
 //             steps {
 //                 echo 'Checking out the code...'
