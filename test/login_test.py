@@ -1,13 +1,11 @@
-from typing import Self
 
 from src.features.login_features import LoginFeatures
-from src.pages.login_signup_page import LoginSignupPage
 from test.base_test import BaseTest
 
 
 class TestLoginSignup(BaseTest):
 
-    def __init__(self):
+    def setup_method(self):
         self.__login_feature = LoginFeatures()
 
     def test_valid_login(self):
