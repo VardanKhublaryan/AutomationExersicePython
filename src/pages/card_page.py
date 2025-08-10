@@ -1,3 +1,4 @@
+
 from selenium.webdriver.common.by import By
 
 from src.pages.base_page import BasePage
@@ -15,6 +16,8 @@ class CardPage(BasePage):
 
     def click_to_here_btn(self):
         self.__web_element.click_to(self.__click_here_btn)
+        from src.pages.products_page import ProductsPage
+        return ProductsPage(self.driver)
 
     def is_card_visible(self) -> bool:
         return self.__web_element.is_displayed(self.__item_description)
