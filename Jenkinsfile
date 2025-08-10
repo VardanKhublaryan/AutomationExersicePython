@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     environment {
-        // Define the path to Python (update this to your Python installation path)
         PYTHON = "C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python312\\python.exe"
         VENV_DIR = "${WORKSPACE}\\venv"
         ALLURE_RESULTS_DIR = "${WORKSPACE}\\allure-results"
@@ -34,16 +33,17 @@ pipeline {
                 bat """
                     call "${VENV_DIR}\\Scripts\\activate"
                     pip install -r requirements.txt
+                    pip install allure-pytest
                 """
             }
         }
 
         stage('Run Tests') {
             steps {
-                echo 'Running tests...'
+                echo 'Running tests with Allure...'
                 bat """
                     call "${VENV_DIR}\\Scripts\\activate"
-                    pytest --junitxml=test-results.xml --html=report.html
+                    pytest --junitxml=test-results.xml --alluredir="${ALLURE_RESULTS_DIR}" --html=report.html
                 """
             }
         }
@@ -59,7 +59,7 @@ pipeline {
 
         stage('Publish Test Results') {
             steps {
-                echo 'Publishing test results...'
+                echo 'Publishing test results and reports...'
                 junit 'test-results.xml'
                 publishHTML(target: [
                     allowMissing: false,
@@ -69,6 +69,15 @@ pipeline {
                     reportFiles: 'report.html',
                     reportName: 'HTML Test Report'
                 ])
+                publishHTML(target: [
+                    allowMissing: false,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: "${ALLURE_REPORT_DIR}",
+                    reportFiles: 'index.html',
+                    reportName: 'Allure Report',
+                    reportTitles: 'Allure Report'
+                ])
             }
         }
     }
@@ -77,6 +86,8 @@ pipeline {
         always {
             echo 'Cleaning up...'
             bat "rmdir /s /q ${VENV_DIR}"  // Clean up the virtual environment
+            bat "rmdir /s /q ${ALLURE_RESULTS_DIR}"
+            bat "rmdir /s /q ${ALLURE_REPORT_DIR}"
         }
         success {
             echo 'Pipeline succeeded!'
