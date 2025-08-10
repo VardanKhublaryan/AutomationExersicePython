@@ -5,6 +5,8 @@ pipeline {
         // Define the path to Python (update this to your Python installation path)
         PYTHON = "C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python312\\python.exe"
         VENV_DIR = "${WORKSPACE}\\venv"
+        ALLURE_RESULTS_DIR = "${WORKSPACE}\\allure-results"
+        ALLURE_REPORT_DIR = "${WORKSPACE}\\allure-report"
     }
 
     stages {
@@ -42,6 +44,15 @@ pipeline {
                 bat """
                     call "${VENV_DIR}\\Scripts\\activate"
                     pytest --junitxml=test-results.xml --html=report.html
+                """
+            }
+        }
+
+        stage('Generate Allure Report') {
+            steps {
+                echo 'Generating Allure report...'
+                bat """
+                    allure generate "${ALLURE_RESULTS_DIR}" --clean -o "${ALLURE_REPORT_DIR}"
                 """
             }
         }
