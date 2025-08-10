@@ -18,6 +18,7 @@ class ProductsPage(BasePage):
         self.__web_element.click_to(self.__buttons[0])
         return self
 
-    def click_continue_shop_btn(self) -> Self:
+    def click_continue_shop_btn(self):
         self.__web_element.click_to(self.__continue_shopping_btn)
-        return self
+        from src.pages.card_page import CardPage
+        return CardPage(self.driver)
