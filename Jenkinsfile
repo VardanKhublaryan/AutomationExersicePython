@@ -48,7 +48,6 @@ pipeline {
             }
         }
 
-
         stage('Generate Allure Report') {
             steps {
                 echo 'Generating Allure report...'
