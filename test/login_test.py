@@ -1,27 +1,32 @@
+from typing import Self
+
+from src.features.login_features import LoginFeatures
 from src.pages.login_signup_page import LoginSignupPage
 from test.base_test import BaseTest
 
 
 class TestLoginSignup(BaseTest):
-    """Test cases for Login and Signup functionality."""
+
+    def __init__(self):
+        self.__login_feature = LoginFeatures()
 
     def test_valid_login(self):
-        login_page = LoginSignupPage(self.driver)
-        login_page.open_page()
-        login_page.log_in("testAuto@gmail.com", "test")
-
-        assert "test" in login_page.get_account_text()
+        assert ("test" in
+                self.__login_feature.open_login_page_and_login("testAuto@gmail.com",
+                                                               "test",
+                                                               self.driver)
+                .get_account_text())
 
     def test_wrong_login(self):
-        login_page = LoginSignupPage(self.driver)
-        login_page.open_page()
-        login_page.log_in("abscd@gmail.com", "4353")
-
-        assert "Your email or password is incorrect!" in login_page.get_wrong_data_error()
+        assert ("Your email or password is incorrect!" in
+                self.__login_feature.open_login_page_and_login("abscd@gmail.com",
+                                                               "4353",
+                                                               self.driver)
+                .get_wrong_data_error())
 
     def test_signup_existing_email(self):
-        login_page = LoginSignupPage(self.driver)
-        login_page.open_page()
-        login_page.signup('test', 'test@gmail.com')
-
-        assert "Email Address already exist!" in login_page.get_exist_email_err()
+        assert ("Email Address already exist!" in
+                self.__login_feature.open_login_page_and_sign_up('test',
+                                                                 'test@gmail.com',
+                                                                 self.driver)
+                .get_exist_email_err())
