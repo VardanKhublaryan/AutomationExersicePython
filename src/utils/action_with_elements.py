@@ -43,5 +43,9 @@ class ActionWithElements(WaitHelper):
         select = Select(element)
         select.select_by_value(value)
 
+    def is_displayed(self,locator) -> bool:
+        element = self.wait_element_visible(locator)
+        return element.is_displayed()
+
 
 

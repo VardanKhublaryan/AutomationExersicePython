@@ -1,3 +1,4 @@
-selenium
-pytest
+selenium~=4.28.1
+pytest~=8.3.4
 pytest-html
+allure-python-commons~=2.15.0
