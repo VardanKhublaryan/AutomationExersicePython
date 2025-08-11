@@ -36,71 +36,15 @@ pipeline {
 
         stage('Install Dependencies If Needed') {
             steps {
-                script {
-                    echo 'Installing dependencies only if missing...'
-                    bat """
-                        call "${VENV_DIR}\\Scripts\\activate"
-                        pip install --upgrade pip
-                        pip install --upgrade --requirement requirements.txt --no-cache-dir
-                        pip show allure-pytest >nul 2>&1 || pip install allure-pytest --no-cache-dir
-                    """
-                }
+                echo 'Installing dependencies only if missing...'
+                bat """
+                    call "${VENV_DIR}\\Scripts\\activate"
+                    pip install --upgrade pip
+                    pip install --upgrade --requirement requirements.txt --no-cache-dir
+                    pip show allure-pytest >nul 2>&1 || pip install allure-pytest --no-cache-dir
+                """
             }
         }
 
         stage('Run Tests') {
             steps {
-                echo 'Running tests with Allure...'
-                bat """
-                    call "${VENV_DIR}\\Scripts\\activate"
-                    pytest --junitxml=test-results.xml --alluredir="${ALLURE_RESULTS_DIR}" --html=report.html
-                """
-            }
-        }
-
-        stage('Publish Allure Report') {
-            steps {
-                echo 'Publishing Allure report in Jenkins...'
-                allure includeProperties: false, jdk: '', results: [[path: "${ALLURE_RESULTS_DIR}"]]
-            }
-        }
-
-        stage('Publish Test Results') {
-            steps {
-                echo 'Publishing test results and reports...'
-                junit 'test-results.xml'
-                publishHTML(target: [
-                    allowMissing: false,
-                    alwaysLinkToLastBuild: true,
-                    keepAll: true,
-                    reportDir: '.',
-                    reportFiles: 'report.html',
-                    reportName: 'HTML Test Report'
-                ])
-                publishHTML(target: [
-                    allowMissing: false,
-                    alwaysLinkToLastBuild: true,
-                    keepAll: true,
-                    reportDir: "${ALLURE_REPORT_DIR}",
-                    reportFiles: 'index.html',
-                    reportName: 'Allure Report (Static HTML)',
-                    reportTitles: 'Allure Report'
-                ])
-            }
-        }
-    }
-
-    post {
-        always {
-            echo 'Cleaning up test results (keeping venv and dependencies)...'
-            bat "if exist ${ALLURE_RESULTS_DIR} rmdir /s /q ${ALLURE_RESULTS_DIR}"
-            bat "if exist ${ALLURE_REPORT_DIR} rmdir /s /q ${ALLURE_REPORT_DIR}"
-        }
-        success {
-            echo 'Pipeline succeeded!'
-        }
-        failure {
-            echo 'Pipeline failed!'
-        }
-    }
-}
