@@ -56,13 +56,12 @@ pipeline {
                 """
             }
         }
-
         stage('Publish Allure Report') {
-            steps {
-                echo 'Publishing Allure report in Jenkins...'
-                allure includeProperties: false, jdk: '', results: [[path: "${ALLURE_RESULTS_DIR}"]]
-            }
-        }
+           steps {
+              echo 'Publishing Allure report in Jenkins...'
+             allure includeProperties: false, jdk: '', results: [[path: env.ALLURE_RESULTS_DIR]]
+    }
+}
 
         stage('Publish Test Results') {
             steps {
