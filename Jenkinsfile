@@ -12,7 +12,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo 'Checking out the code...'
-                git 'https://github.com/VardanKhublaryan/AutomationExersice/'
+                git branch: 'main', url: 'https://github.com/VardanKhublaryan/AutomationExersice/'
             }
         }
 
@@ -34,15 +34,17 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Install Dependencies If Needed') {
             steps {
-                echo 'Installing dependencies (only if missing)...'
-                bat """
-                    call "${VENV_DIR}\\Scripts\\activate"
-                    pip install --upgrade pip
-                    pip install --upgrade --requirement requirements.txt --no-cache-dir
-                    pip install allure-pytest --no-cache-dir
-                """
+                script {
+                    echo 'Installing dependencies only if missing...'
+                    bat """
+                        call "${VENV_DIR}\\Scripts\\activate"
+                        pip install --upgrade pip
+                        pip install --upgrade --requirement requirements.txt --no-cache-dir
+                        pip show allure-pytest >nul 2>&1 || pip install allure-pytest --no-cache-dir
+                    """
+                }
             }
         }
 
@@ -90,9 +92,9 @@ pipeline {
 
     post {
         always {
-            echo 'Cleaning up test results (keeping venv)...'
-            bat "rmdir /s /q ${ALLURE_RESULTS_DIR}"
-            bat "rmdir /s /q ${ALLURE_REPORT_DIR}"
+            echo 'Cleaning up test results (keeping venv and dependencies)...'
+            bat "if exist ${ALLURE_RESULTS_DIR} rmdir /s /q ${ALLURE_RESULTS_DIR}"
+            bat "if exist ${ALLURE_REPORT_DIR} rmdir /s /q ${ALLURE_REPORT_DIR}"
         }
         success {
             echo 'Pipeline succeeded!'
