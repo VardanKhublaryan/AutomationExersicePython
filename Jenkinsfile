@@ -48,19 +48,12 @@ pipeline {
             }
         }
 
-        stage('Generate Allure Report') {
+        stage('Publish Allure Report') {
             steps {
-                echo 'Generating Allure report...'
-                bat """
-                    allure generate "${ALLURE_RESULTS_DIR}" --clean -o "${ALLURE_REPORT_DIR}"
-                """
+                echo 'Publishing Allure report in Jenkins...'
+                allure includeProperties: false, jdk: '', results: [[path: "${ALLURE_RESULTS_DIR}"]]
             }
         }
-
-         stage('Publish Allure Report') {
-            steps {
-                allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
-            }
 
         stage('Publish Test Results') {
             steps {
@@ -80,7 +73,7 @@ pipeline {
                     keepAll: true,
                     reportDir: "${ALLURE_REPORT_DIR}",
                     reportFiles: 'index.html',
-                    reportName: 'Allure Report',
+                    reportName: 'Allure Report (Static HTML)',
                     reportTitles: 'Allure Report'
                 ])
             }
@@ -90,7 +83,7 @@ pipeline {
     post {
         always {
             echo 'Cleaning up...'
-            bat "rmdir /s /q ${VENV_DIR}"  // Clean up the virtual environment
+            bat "rmdir /s /q ${VENV_DIR}"
             bat "rmdir /s /q ${ALLURE_RESULTS_DIR}"
             bat "rmdir /s /q ${ALLURE_REPORT_DIR}"
         }
