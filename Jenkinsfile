@@ -57,10 +57,12 @@ pipeline {
             }
         }
 
-         stage('Publish Allure Report') {
+        stage('Publish Allure Report') {
             steps {
-                allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
+                echo 'Publishing Allure report in Jenkins...'
+                allure includeProperties: false, jdk: '', results: [[path: "${ALLURE_RESULTS_DIR}"]]
             }
+        }
 
         stage('Publish Test Results') {
             steps {
@@ -90,9 +92,9 @@ pipeline {
     post {
         always {
             echo 'Cleaning up...'
-            bat "rmdir /s /q ${VENV_DIR}"  // Clean up the virtual environment
-            bat "rmdir /s /q ${ALLURE_RESULTS_DIR}"
-            bat "rmdir /s /q ${ALLURE_REPORT_DIR}"
+            bat "if exist ${VENV_DIR} rmdir /s /q ${VENV_DIR}"
+            bat "if exist ${ALLURE_RESULTS_DIR} rmdir /s /q ${ALLURE_RESULTS_DIR}"
+            bat "if exist ${ALLURE_REPORT_DIR} rmdir /s /q ${ALLURE_REPORT_DIR}"
         }
         success {
             echo 'Pipeline succeeded!'
