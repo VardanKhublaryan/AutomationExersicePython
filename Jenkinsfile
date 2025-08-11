@@ -18,22 +18,30 @@ pipeline {
 
         stage('Set Up Virtual Environment') {
             steps {
-                echo 'Setting up a Python virtual environment...'
-                bat """
-                    "${PYTHON}" -m venv "${VENV_DIR}"
-                    call "${VENV_DIR}\\Scripts\\activate"
-                    python -m pip install --upgrade pip
-                """
+                echo 'Checking if virtual environment exists...'
+                script {
+                    if (!fileExists("${VENV_DIR}\\Scripts\\activate.bat")) {
+                        echo 'Virtual environment not found, creating...'
+                        bat """
+                            "${PYTHON}" -m venv "${VENV_DIR}"
+                            call "${VENV_DIR}\\Scripts\\activate"
+                            python -m pip install --upgrade pip
+                        """
+                    } else {
+                        echo 'Virtual environment already exists, skipping creation.'
+                    }
+                }
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                echo 'Installing dependencies...'
+                echo 'Installing dependencies (only if missing)...'
                 bat """
                     call "${VENV_DIR}\\Scripts\\activate"
-                    pip install -r requirements.txt
-                    pip install allure-pytest
+                    pip install --upgrade pip
+                    pip install --upgrade --requirement requirements.txt --no-cache-dir
+                    pip install allure-pytest --no-cache-dir
                 """
             }
         }
@@ -82,8 +90,7 @@ pipeline {
 
     post {
         always {
-            echo 'Cleaning up...'
-            bat "rmdir /s /q ${VENV_DIR}"
+            echo 'Cleaning up test results (keeping venv)...'
             bat "rmdir /s /q ${ALLURE_RESULTS_DIR}"
             bat "rmdir /s /q ${ALLURE_REPORT_DIR}"
         }
