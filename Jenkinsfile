@@ -54,7 +54,7 @@ pipeline {
                 allure([
                     includeProperties: false,
                     results: [[path: "${ALLURE_RESULTS_DIR}"]],
-                    installation: 'allure'  // must match the name you configured in Jenkins Global Tool
+                    installation: 'Allure'  // must match the name you configured in Jenkins Global Tool
                 ])
             }
         }
