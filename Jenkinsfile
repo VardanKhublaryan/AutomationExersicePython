@@ -49,6 +49,10 @@ pipeline {
 
    stage('Publish Allure Report') {
     steps {
+     bat """
+allure serve allure-results
+
+                """
         echo 'Publishing Allure report in Jenkins...'
         allure([
             includeProperties: false,
