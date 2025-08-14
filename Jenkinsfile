@@ -47,17 +47,16 @@ pipeline {
             }
         }
 
-        stage('Publish Allure Report') {
-            steps {
-                echo 'Publishing Allure report in Jenkins...'
-                // This will automatically generate the report and create the link in Jenkins
-                allure([
-                    includeProperties: false,
-                    results: [[path: "${ALLURE_RESULTS_DIR}"]],
-                    installation: 'Allure'  // must match the name you configured in Jenkins Global Tool
-                ])
-            }
-        }
+   stage('Publish Allure Report') {
+    steps {
+        echo 'Publishing Allure report in Jenkins...'
+        allure([
+            includeProperties: false,
+            results: [[path: "${ALLURE_RESULTS_DIR}"]]
+        ])
+    }
+}
+
 
         stage('Publish Test Results') {
             steps {
