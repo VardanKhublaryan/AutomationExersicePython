@@ -10,5 +10,4 @@ class CardFeatures:
         return (CardPage(driver)
                 .open_page()
                 .click_to_here_btn()
-                .click_add_to_card_button()
-                .click_continue_shop_btn())
+                .click_add_to_card_button())
